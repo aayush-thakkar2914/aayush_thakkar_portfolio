@@ -16,6 +16,10 @@ import {
   Brain,
   Send,
   Loader2,
+  Menu,
+  X,
+  Moon,
+  Sun,
 } from "lucide-react"
 
 export default function Portfolio() {
@@ -29,10 +33,29 @@ export default function Portfolio() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDownloading, setIsDownloading] = useState(false)
   const [submitMessage, setSubmitMessage] = useState("")
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const navigationItems = ["About", "Skills", "Experience", "Projects", "Contact"]
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode)
     document.documentElement.classList.toggle("dark")
+  }
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
+  const handleNavClick = (item: string) => {
+    scrollToSection(item.toLowerCase())
+    setIsMobileMenuOpen(false) // Close mobile menu after clicking
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -114,53 +137,156 @@ export default function Portfolio() {
     }
   }
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-  }
-
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
-      {/* Navigation */}
+      {/* Mobile-Responsive Navigation */}
       <nav className="fixed top-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md z-50 border-b border-gray-100 dark:border-gray-800 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="text-xl font-bold text-gray-900 dark:text-white">Aayush Thakkar</div>
+            {/* Logo/Brand */}
+            <div className="text-xl font-bold text-gray-900 dark:text-white">
+              Aayush Thakkar
+            </div>
+
+            {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8 items-center">
-              {["About", "Skills", "Experience", "Projects", "Contact"].map((item) => (
+              {navigationItems.map((item) => (
                 <button
                   key={item}
                   onClick={() => scrollToSection(item.toLowerCase())}
-                  className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
+                  className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors font-medium"
                 >
                   {item}
                 </button>
               ))}
+              
+              {/* Desktop Dark Mode Toggle */}
               <button
                 onClick={toggleDarkMode}
                 className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
                 aria-label="Toggle dark mode"
               >
                 {isDarkMode ? (
-                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <Sun className="w-5 h-5 text-yellow-500" />
                 ) : (
-                  <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                  </svg>
+                  <Moon className="w-5 h-5 text-gray-600" />
+                )}
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center space-x-2">
+              {/* Mobile Dark Mode Toggle */}
+              <button
+                onClick={toggleDarkMode}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
+                aria-label="Toggle dark mode"
+              >
+                {isDarkMode ? (
+                  <Sun className="w-5 h-5 text-yellow-500" />
+                ) : (
+                  <Moon className="w-5 h-5 text-gray-600" />
+                )}
+              </button>
+              
+              {/* Hamburger Menu Button */}
+              <button
+                onClick={toggleMobileMenu}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
+                aria-label="Toggle mobile menu"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                ) : (
+                  <Menu className="w-6 h-6 text-gray-600 dark:text-gray-300" />
                 )}
               </button>
             </div>
           </div>
         </div>
       </nav>
+
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Mobile Sidebar */}
+      <div
+        className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white dark:bg-gray-900 z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
+          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex flex-col h-full">
+          {/* Sidebar Header */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              Navigation
+            </h2>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
+              aria-label="Close menu"
+            >
+              <X className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+            </button>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="flex-1 py-6">
+            <nav className="space-y-2 px-6">
+              {navigationItems.map((item, index) => (
+                <button
+                  key={item}
+                  onClick={() => handleNavClick(item)}
+                  className="w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium flex items-center space-x-3"
+                >
+                  <span className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 text-sm font-bold">
+                    {index + 1}
+                  </span>
+                  <span>{item}</span>
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          {/* Sidebar Footer */}
+          <div className="p-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="text-center">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                Get in touch
+              </p>
+              <div className="flex justify-center space-x-4">
+                <a
+                  href="mailto:aayusht2004@gmail.com"
+                  className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  Email
+                </a>
+                <a
+                  href="https://github.com/aayush-thakkar2914"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  GitHub
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/aayush-thakkar-b7a80225a/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <section className="pt-20 pb-16 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
@@ -178,21 +304,20 @@ export default function Portfolio() {
 
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <a
-              href="mailto:aayusht2004@gmail.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
-            >
-              <Mail size={20} />
-              aayusht2004@gmail.com
-            </a>
-
+                href="mailto:aayusht2004@gmail.com"
+                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
+              >
+                <Mail size={20} />
+                <span className="hidden sm:inline">aayusht2004@gmail.com</span>
+                <span className="sm:hidden">Email</span>
+              </a>
               <a
                 href="tel:+917874480170"
                 className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
               >
                 <Phone size={20} />
-                +91 78744 80170
+                <span className="hidden sm:inline">+91 78744 80170</span>
+                <span className="sm:hidden">Call</span>
               </a>
               <a
                 href="https://github.com/aayush-thakkar2914"
@@ -201,7 +326,8 @@ export default function Portfolio() {
                 className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
               >
                 <Github size={20} />
-                @aayush-thakkar2914
+                <span className="hidden sm:inline">@aayush-thakkar2914</span>
+                <span className="sm:hidden">GitHub</span>
               </a>
               <a
                 href="https://www.linkedin.com/in/aayush-thakkar-b7a80225a/"
@@ -210,14 +336,15 @@ export default function Portfolio() {
                 className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
               >
                 <Linkedin size={20} />
-                aayush-thakkar
+                <span className="hidden sm:inline">aayush-thakkar</span>
+                <span className="sm:hidden">LinkedIn</span>
               </a>
             </div>
 
             <button 
               onClick={handleResumeDownload}
               disabled={isDownloading}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg disabled:opacity-50 inline-flex items-center transition-colors duration-200"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 rounded-lg disabled:opacity-50 inline-flex items-center text-sm sm:text-base"
             >
               {isDownloading ? (
                 <>
@@ -264,7 +391,7 @@ export default function Portfolio() {
             <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {[
               {
                 title: "Programming",
@@ -299,7 +426,7 @@ export default function Portfolio() {
                 <div className="mt-4">
                   <div className="flex flex-wrap gap-2">
                     {category.skills.map((skill) => (
-                      <span key={skill} className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${category.color}`}>
+                      <span key={skill} className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${category.color}`}>
                         {skill}
                       </span>
                     ))}
@@ -356,34 +483,28 @@ export default function Portfolio() {
             ].map((exp, index) => (
               <div
                 key={index}
-                className="rounded-lg border bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white border-l-4 border-l-blue-600 shadow-lg"
+                className="border-l-4 border-l-blue-600 shadow-lg dark:bg-gray-700 dark:border-gray-600 rounded-lg bg-white p-6"
               >
-                <div className="flex flex-col space-y-1.5 p-6">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                    <div>
-                      <div className="text-2xl font-semibold leading-none tracking-tight text-xl text-gray-900 dark:text-white">{exp.title}</div>
-                      <div className="text-sm text-muted-foreground text-lg font-medium text-blue-600 dark:text-blue-400">
-                        {exp.company}
-                      </div>
-                    </div>
-                    <div className="flex items-center text-gray-500 mt-2 md:mt-0">
-                      <Calendar size={16} className="mr-2" />
-                      {exp.period}
-                    </div>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl text-gray-900 dark:text-white font-semibold">{exp.title}</h3>
+                    <p className="text-lg font-medium text-blue-600 dark:text-blue-400">{exp.company}</p>
+                  </div>
+                  <div className="flex items-center text-gray-500 mt-2 md:mt-0">
+                    <Calendar size={16} className="mr-2" />
+                    <span className="text-sm">{exp.period}</span>
                   </div>
                 </div>
-                <div className="p-6 pt-0">
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">{exp.description}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {exp.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="text-foreground border-blue-200 text-blue-700 dark:border-blue-400 dark:text-blue-300 dark:bg-blue-900/20 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">{exp.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {exp.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold border-blue-200 text-blue-700 dark:border-blue-400 dark:text-blue-300 dark:bg-blue-900/20"
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </div>
             ))}
@@ -399,7 +520,7 @@ export default function Portfolio() {
             <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {[
               {
                 title: "Resume Screening Automation",
@@ -439,23 +560,19 @@ export default function Portfolio() {
             ].map((project, index) => (
               <div
                 key={index}
-                className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-gray-700 dark:border-gray-600 rounded-lg border bg-white text-gray-900 shadow-sm p-6"
+                className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-gray-700 dark:border-gray-600 rounded-lg bg-white p-6"
               >
-                <div className="flex flex-col space-y-1.5 p-6 pb-2">
-                  <div className="flex items-center gap-3 mb-2">
-                    {project.icon}
-                    <div className="text-2xl font-semibold leading-none tracking-tight text-xl">{project.title}</div>
-                  </div>
+                <div className="flex items-center gap-3 mb-4">
+                  {project.icon}
+                  <h3 className="text-xl font-semibold dark:text-white">{project.title}</h3>
                 </div>
-                <div className="p-6 pt-0">
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech) => (
-                      <span key={tech} className="bg-gray-100 text-gray-700 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map((tech) => (
+                    <span key={tech} className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-gray-100 text-gray-700">
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </div>
             ))}
@@ -463,113 +580,8 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Education & Certifications */}
-      <section className="py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Education */}
-            <div>
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Education</h2>
-                <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
-              </div>
-
-              <div className="space-y-6">
-                <div className="rounded-lg border bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white border-l-4 border-l-green-600">
-                  <div className="flex flex-col space-y-1.5 p-6">
-                    <div className="flex items-center gap-3">
-                      <GraduationCap className="w-6 h-6 text-green-600" />
-                      <div>
-                        <div className="text-lg dark:text-white font-semibold leading-none tracking-tight">B.Tech in Computer Science</div>
-                        <div className="text-sm text-muted-foreground">Charusat University</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-6 pt-0">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-800 dark:text-gray-300">CGPA: 9.08</span>
-                      <span className="text-gray-800 dark:text-gray-300">2025</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-lg border bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white border-l-4 border-l-blue-600">
-                  <div className="flex flex-col space-y-1.5 p-6">
-                    <div className="flex items-center gap-3">
-                      <GraduationCap className="w-6 h-6 text-blue-600" />
-                      <div>
-                        <div className="text-lg dark:text-white font-semibold leading-none tracking-tight">HSC (XII)</div>
-                        <div className="text-sm text-muted-foreground">H.B. Kapadia New High School</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-6 pt-0">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600 dark:text-gray-300">91%</span>
-                      <span className="text-gray-500 dark:text-gray-400">2021</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Certifications */}
-            <div>
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Certifications</h2>
-                <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
-              </div>
-
-              <div className="space-y-6">
-                <div className="rounded-lg border bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white border-l-4 border-l-purple-600">
-                  <div className="flex flex-col space-y-1.5 p-6">
-                    <div className="flex items-center gap-3">
-                      <Award className="w-6 h-6 text-purple-600" />
-                      <div>
-                        <div className="text-lg dark:text-white font-semibold leading-none tracking-tight">Data Science Masters</div>
-                        <div className="text-sm text-muted-foreground">PW Skills</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-lg border bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white border-l-4 border-l-orange-600">
-                  <div className="flex flex-col space-y-1.5 p-6">
-                    <div className="flex items-center gap-3">
-                      <Award className="w-6 h-6 text-orange-600" />
-                      <div>
-                        <div className="text-lg dark:text-white font-semibold leading-none tracking-tight">Microsoft Power BI</div>
-                        <div className="text-sm text-muted-foreground">Udemy</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="rounded-lg border bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white border-l-4 border-l-teal-600">
-                  <div className="flex flex-col space-y-1.5 p-6">
-                    <div className="flex items-center gap-3">
-                      <Award className="w-6 h-6 text-teal-600" />
-                      <div>
-                        <div className="text-lg dark:text-white font-semibold leading-none tracking-tight">Neo4j Certified Professional</div>
-                        <div className="text-sm text-muted-foreground">Neo4j GraphAcademy</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-6 pt-0">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600 dark:text-gray-300">May 30, 2025</span>
-                      <span className="bg-teal-100 text-teal-800 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">Graph Database</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Contact Section */}
-      <section id="contact" className="py-16 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
+      <section id="contact" className="py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Get In Touch</h2>
@@ -580,7 +592,7 @@ export default function Portfolio() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
             {/* Contact Info */}
             <div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Contact Information</h3>
@@ -597,7 +609,7 @@ export default function Portfolio() {
                     </div>
                     <div>
                       <p className="font-medium text-gray-900 dark:text-white">{contact.label}</p>
-                      <a href={contact.href} target={contact.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" className="text-blue-600 hover:underline transition-colors">
+                      <a href={contact.href} target={contact.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">
                         {contact.value}
                       </a>
                     </div>
@@ -632,7 +644,7 @@ export default function Portfolio() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    className="w-full h-10 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
                     placeholder="Your Name"
                     disabled={isSubmitting}
                   />
@@ -649,7 +661,7 @@ export default function Portfolio() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    className="w-full h-10 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
                     placeholder="your.email@example.com"
                     disabled={isSubmitting}
                   />
@@ -666,7 +678,7 @@ export default function Portfolio() {
                     onChange={handleInputChange}
                     required
                     rows={5}
-                    className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    className="w-full min-h-[120px] rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:cursor-not-allowed disabled:opacity-50 resize-y"
                     placeholder="Your message..."
                     disabled={isSubmitting}
                   />
@@ -675,7 +687,7 @@ export default function Portfolio() {
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none h-10 px-4 py-2"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:pointer-events-none h-10 px-4 py-2"
                 >
                   {isSubmitting ? (
                     <>
