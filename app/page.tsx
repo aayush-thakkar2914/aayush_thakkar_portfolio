@@ -178,12 +178,15 @@ export default function Portfolio() {
 
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <a
-                href="mailto:aayusht2004@gmail.com"
-                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
-              >
-                <Mail size={20} />
-                aayusht2004@gmail.com
-              </a>
+              href="mailto:aayusht2004@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
+            >
+              <Mail size={20} />
+              aayusht2004@gmail.com
+            </a>
+
               <a
                 href="tel:+917874480170"
                 className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
