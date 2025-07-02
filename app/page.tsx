@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -22,6 +21,7 @@ import {
   Globe,
   Brain,
   Send,
+  Loader2,
 } from "lucide-react"
 
 export default function Portfolio() {
@@ -32,30 +32,138 @@ export default function Portfolio() {
   })
 
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState("")
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode)
-    // Toggle dark class on document element
     document.documentElement.classList.toggle("dark")
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log("Form submitted:", formData)
-    alert("Thank you for your message! I'll get back to you soon.")
-    setFormData({ name: "", email: "", message: "" })
+    
+    console.log('Form submit triggered')
+    console.log('Form data:', formData)
+    
+    if (isSubmitting) {
+      console.log('Already submitting, returning')
+      return
+    }
+
+    // Basic validation
+    if (!formData.name.trim()) {
+      setSubmitMessage("Please enter your name")
+      return
+    }
+    if (!formData.email.trim()) {
+      setSubmitMessage("Please enter your email")
+      return
+    }
+    if (!formData.message.trim()) {
+      setSubmitMessage("Please enter a message")
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitMessage("")
+
+    try {
+      console.log('Sending request to /api/contact')
+      
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      console.log('Response status:', response.status)
+      
+      const result = await response.json()
+      console.log('Response data:', result)
+
+      if (result.success) {
+        setSubmitMessage("✅ " + result.message)
+        setFormData({ name: "", email: "", message: "" })
+      } else {
+        setSubmitMessage("❌ " + (result.message || "Failed to send message"))
+      }
+    } catch (error) {
+      console.error('Contact form error:', error)
+      setSubmitMessage("❌ Network error. Please check your connection and try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleResumeDownload = async () => {
+    console.log('Resume download triggered')
+    
+    if (isDownloading) {
+      console.log('Already downloading, returning')
+      return
+    }
+
+    setIsDownloading(true)
+
+    try {
+      console.log('Fetching /api/resume')
+      
+      const response = await fetch('/api/resume')
+      console.log('Resume response status:', response.status)
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error('Resume download error:', errorData)
+        alert('❌ ' + (errorData.message || 'Failed to download resume'))
+        return
+      }
+
+      // Get the blob
+      const blob = await response.blob()
+      console.log('Blob size:', blob.size)
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'Aayush_Thakkar_Resume.pdf'
+      
+      // Append to body, click, and remove
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      
+      // Clean up
+      window.URL.revokeObjectURL(url)
+      
+      console.log('Download completed')
+      alert('✅ Resume download started!')
+      
+    } catch (error) {
+      console.error('Resume download error:', error)
+      alert('❌ Failed to download resume. Please try again.')
+    } finally {
+      setIsDownloading(false)
+    }
   }
 
   const scrollToSection = (sectionId: string) => {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" })
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
   }
 
   return (
@@ -148,9 +256,22 @@ export default function Portfolio() {
               </a>
             </div>
 
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg">
-              <Download className="mr-2" size={20} />
-              Download Resume
+            <Button 
+              onClick={handleResumeDownload}
+              disabled={isDownloading}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg disabled:opacity-50"
+            >
+              {isDownloading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Downloading...
+                </>
+              ) : (
+                <>
+                  <Download className="mr-2" size={20} />
+                  Download Resume
+                </>
+              )}
             </Button>
           </div>
         </div>
@@ -438,8 +559,8 @@ export default function Portfolio() {
                   </CardHeader>
                   <CardContent>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-800">CGPA: 9.08</span>
-                      <span className="text-gray-800">2025</span>
+                      <span className="text-gray-800 dark:text-gray-300">CGPA: 9.08</span>
+                      <span className="text-gray-800 dark:text-gray-300">2025</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -456,8 +577,8 @@ export default function Portfolio() {
                   </CardHeader>
                   <CardContent>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600-b">91%</span>
-                      <span className="text-gray-500-b">2021</span>
+                      <span className="text-gray-600 dark:text-gray-300">91%</span>
+                      <span className="text-gray-500 dark:text-gray-400">2021</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -495,6 +616,7 @@ export default function Portfolio() {
                     </div>
                   </CardHeader>
                 </Card>
+                
                 <Card className="border-l-4 border-l-teal-600 dark:bg-gray-700 dark:border-gray-600">
                   <CardHeader>
                     <div className="flex items-center gap-3">
@@ -598,10 +720,22 @@ export default function Portfolio() {
             {/* Contact Form */}
             <div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Send a Message</h3>
+              
+              {/* Show submission message */}
+              {submitMessage && (
+                <div className={`mb-4 p-3 rounded-lg ${
+                  submitMessage.startsWith('✅') 
+                    ? 'bg-green-100 text-green-800 border border-green-200' 
+                    : 'bg-red-100 text-red-800 border border-red-200'
+                }`}>
+                  {submitMessage}
+                </div>
+              )}
+              
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Name
+                    Name *
                   </label>
                   <Input
                     type="text"
@@ -612,12 +746,13 @@ export default function Portfolio() {
                     required
                     className="w-full"
                     placeholder="Your Name"
+                    disabled={isSubmitting}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Email
+                    Email *
                   </label>
                   <Input
                     type="email"
@@ -628,12 +763,13 @@ export default function Portfolio() {
                     required
                     className="w-full"
                     placeholder="your.email@example.com"
+                    disabled={isSubmitting}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Message
+                    Message *
                   </label>
                   <Textarea
                     id="message"
@@ -644,12 +780,26 @@ export default function Portfolio() {
                     rows={5}
                     className="w-full"
                     placeholder="Your message..."
+                    disabled={isSubmitting}
                   />
                 </div>
 
-                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                  <Send className="mr-2" size={20} />
-                  Send Message
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="mr-2" size={20} />
+                      Send Message
+                    </>
+                  )}
                 </Button>
               </form>
             </div>
