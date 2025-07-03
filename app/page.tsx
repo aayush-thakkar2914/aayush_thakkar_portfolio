@@ -293,40 +293,9 @@ export default function Portfolio() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="mb-8">
-              {/* Enhanced Profile Image Section */}
-              <div className="relative w-32 h-32 mx-auto mb-6 group">
-                {/* Gradient background ring */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-600 rounded-full animate-pulse"></div>
-                
-                {/* Profile Image Container */}
-                <div className="relative w-full h-full rounded-full overflow-hidden transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 shadow-2xl border-4 border-white dark:border-gray-800">
-                  <img 
-                    src="https://github.com/aayush-thakkar2914/aayush_thakkar_portfolio/blob/main/public/assets/git.jpg" 
-                    alt="Aayush Thakkar - Professional Profile" 
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      // Fallback to initials if image fails to load
-                      const target = e.currentTarget as HTMLImageElement;
-                      target.style.display = 'none';
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'flex';
-                    }}
-                  />
-                  {/* Fallback initials (hidden by default) */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-4xl font-bold" style={{ display: 'none' }}>
-                    AT
-                  </div>
-                  
-                  {/* Hover overlay effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                </div>
-                
-                {/* Decorative sparkle effect */}
-                <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
-                  <span className="text-white text-xs">✨</span>
-                </div>
+              <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-4xl font-bold">
+                AT
               </div>
-              
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">Aayush Thakkar</h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl mx-auto">
                 Tech enthusiast | Python Developer | FastAPI & Java Backend | ML + Automation Explorer
@@ -336,7 +305,7 @@ export default function Portfolio() {
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <a
                 href="mailto:aayusht2004@gmail.com"
-                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors transform hover:scale-105"
+                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
               >
                 <Mail size={20} />
                 <span className="hidden sm:inline">aayusht2004@gmail.com</span>
@@ -344,7 +313,7 @@ export default function Portfolio() {
               </a>
               <a
                 href="tel:+917874480170"
-                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors transform hover:scale-105"
+                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
               >
                 <Phone size={20} />
                 <span className="hidden sm:inline">+91 78744 80170</span>
@@ -354,7 +323,7 @@ export default function Portfolio() {
                 href="https://github.com/aayush-thakkar2914"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors transform hover:scale-105"
+                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
               >
                 <Github size={20} />
                 <span className="hidden sm:inline">@aayush-thakkar2914</span>
@@ -364,7 +333,7 @@ export default function Portfolio() {
                 href="https://www.linkedin.com/in/aayush-thakkar-b7a80225a/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors transform hover:scale-105"
+                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
               >
                 <Linkedin size={20} />
                 <span className="hidden sm:inline">aayush-thakkar</span>
@@ -375,7 +344,7 @@ export default function Portfolio() {
             <button 
               onClick={handleResumeDownload}
               disabled={isDownloading}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 rounded-lg disabled:opacity-50 inline-flex items-center text-sm sm:text-base transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 rounded-lg disabled:opacity-50 inline-flex items-center text-sm sm:text-base"
             >
               {isDownloading ? (
                 <>
@@ -449,7 +418,7 @@ export default function Portfolio() {
                 color: "bg-orange-100 text-orange-800"
               }
             ].map((category, index) => (
-              <div key={index} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 dark:bg-gray-700 dark:border-gray-600 rounded-lg bg-white p-6 transform hover:scale-105">
+              <div key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-gray-700 dark:border-gray-600 rounded-lg bg-white p-6">
                 <div className="text-center">
                   {category.icon}
                   <h3 className="text-xl dark:text-white font-semibold">{category.title}</h3>
@@ -514,7 +483,7 @@ export default function Portfolio() {
             ].map((exp, index) => (
               <div
                 key={index}
-                className="border-l-4 border-l-blue-600 shadow-lg dark:bg-gray-700 dark:border-gray-600 rounded-lg bg-white p-6 transform hover:scale-105 transition-all duration-300"
+                className="border-l-4 border-l-blue-600 shadow-lg dark:bg-gray-700 dark:border-gray-600 rounded-lg bg-white p-6"
               >
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                   <div>
@@ -591,7 +560,7 @@ export default function Portfolio() {
             ].map((project, index) => (
               <div
                 key={index}
-                className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 dark:bg-gray-700 dark:border-gray-600 rounded-lg bg-white p-6 transform hover:scale-105"
+                className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-gray-700 dark:border-gray-600 rounded-lg bg-white p-6"
               >
                 <div className="flex items-center gap-3 mb-4">
                   {project.icon}
@@ -634,7 +603,7 @@ export default function Portfolio() {
                   { icon: <Github className="w-6 h-6 text-gray-600" />, label: "GitHub", value: "@aayush-thakkar2914", href: "https://github.com/aayush-thakkar2914", bg: "bg-gray-100" },
                   { icon: <Linkedin className="w-6 h-6 text-blue-600" />, label: "LinkedIn", value: "aayush-thakkar", href: "https://www.linkedin.com/in/aayush-thakkar-b7a80225a/", bg: "bg-blue-100" }
                 ].map((contact, index) => (
-                  <div key={index} className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div key={index} className="flex items-center gap-4">
                     <div className={`w-12 h-12 ${contact.bg} rounded-lg flex items-center justify-center`}>
                       {contact.icon}
                     </div>
@@ -718,7 +687,7 @@ export default function Portfolio() {
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:pointer-events-none h-10 px-4 py-2 transform hover:scale-105"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:pointer-events-none h-10 px-4 py-2"
                 >
                   {isSubmitting ? (
                     <>
@@ -744,14 +713,14 @@ export default function Portfolio() {
           <div className="text-center">
             <p className="text-gray-400">© 2025 Aayush Thakkar. All rights reserved.</p>
             <div className="flex justify-center gap-6 mt-4">
-              <a href="mailto:aayusht2004@gmail.com" className="text-gray-400 hover:text-white transition-colors transform hover:scale-110">
+              <a href="mailto:aayusht2004@gmail.com" className="text-gray-400 hover:text-white transition-colors">
                 <Mail size={20} />
               </a>
               <a
                 href="https://github.com/aayush-thakkar2914"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors transform hover:scale-110"
+                className="text-gray-400 hover:text-white transition-colors"
               >
                 <Github size={20} />
               </a>
@@ -759,7 +728,7 @@ export default function Portfolio() {
                 href="https://www.linkedin.com/in/aayush-thakkar-b7a80225a/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors transform hover:scale-110"
+                className="text-gray-400 hover:text-white transition-colors"
               >
                 <Linkedin size={20} />
               </a>
